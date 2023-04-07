@@ -180,7 +180,10 @@ class GameController extends Controller
         //return response("This space has already been claimed!")->setStatusCode(403)->header('Content-Type', 'text/plain');
 
         // [ The code to update the game board goes here ]
-
+        if($game->getSpace($x, $y) === GameMark::Cross || $game->getSpace($x, $y) === GameMark::Cross)
+            return response("This space has already been claimed!")->setStatusCode(403)->header('Content-Type', 'text/plain');
+        if($game->getSpace($x, $y) === GameMark::None)
+            $game->setSpace( $x, $y, GameMark::Circle );
         // Saving the game board and output it to the player
         $game->save();
         return $this->status_output( $game );
