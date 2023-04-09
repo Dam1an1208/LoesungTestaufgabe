@@ -97,6 +97,82 @@ class GameController extends Controller
             $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 2 ) &&
             $game->getAntiDiagonal(0)->getSpace( 0 ) !== GameMark::None
         ) return true;
+        
+        // Shortened version of field checking for a 3x3 TicTacToe
+
+        // Check the rows
+        /*for($i = 0; $i < 3; $i++)
+        {
+            if(    
+                $game->getRow($i)->getSpace( 0 ) === $game->getRow($i)->getSpace( 1 ) &&
+                $game->getRow($i)->getSpace( 0 ) === $game->getRow($i)->getSpace( 2 ) &&
+                $game->getRow($i)->getSpace( 0 ) !== GameMark::None
+                ) return true;
+        }
+
+        // Check the collumns
+        for($i = 0; $i < 3; $i++)
+        {
+            if (    
+                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 1 ) &&
+                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 2 ) &&
+                $game->getColumn($i)->getSpace( 0 ) !== GameMark::None
+            ) return true;
+        }*/
+
+        // Check the main diagonal
+        /*if (    
+            $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 1 ) &&
+            $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 2 ) &&
+            $game->getMainDiagonal(0)->getSpace( 0 ) !== GameMark::None
+        ) return true;*/
+
+        // Check the anti-diagonal
+        /*if (    
+            $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 1 ) &&
+            $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 2 ) &&
+            $game->getAntiDiagonal(0)->getSpace( 0 ) !== GameMark::None
+        ) return true;*/
+
+        // Field checking for a 4x4 TicTacToe
+
+        // Check the rows for 4x4 TicTacToe
+        /*for($i = 0; $i < 4; $i++)
+        {
+            if (    
+                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 1 ) &&
+                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 2 ) &&
+                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 3 ) &&
+                $game->getColumn($i)->getSpace( 0 ) !== GameMark::None
+            ) return true;
+        }*/
+
+        // Check the collumns for 4x4 TicTacToe
+        /*for($i = 0; $i < 4; $i++)
+        {
+            if (    
+                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 1 ) &&
+                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 2 ) &&
+                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 3 ) &&
+                $game->getColumn($i)->getSpace( 0 ) !== GameMark::None
+            ) return true;
+        }*/
+
+        // Check the main diagonal for 4x4 TicTacToe
+        /*if (    
+            $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 1 ) &&
+            $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 2 ) &&
+            $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 3 ) &&
+            $game->getMainDiagonal(0)->getSpace( 0 ) !== GameMark::None
+        ) return true;*/
+        
+        // Check the anti-diagonal for 4x4 TicTacToe
+        /*if (    
+            $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 1 ) &&
+            $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 2 ) &&
+            $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 3 ) &&
+            $game->getAntiDiagonal(0)->getSpace( 0 ) !== GameMark::None
+        ) return true;*/
 
         return false;
     }
@@ -107,8 +183,7 @@ class GameController extends Controller
         // Here, you need to code a way to find out who has won the game.
         // This function needs to return null if nobody has won yet - you can use someoneHasWon( $game ) for this.
         // If someone has won, it needs to return either GamePlayer::Human or GamePlayer::Robot.
-        // =============================================================================================================
-
+        // =============================================================================================================#
         return null;
     }
 
@@ -154,6 +229,10 @@ class GameController extends Controller
         if ($x < 0 || $x > 2 || $y < 0 || $y > 2)
             return response("Position outside of the game board")->setStatusCode(422)->header('Content-Type', 'text/plain');
 
+        // Checking for a 4x4 TicTacToe
+        /*if ($x < 0 || $x > 3 || $y < 0 || $y > 3)
+            return response("Position outside of the game board")->setStatusCode(422)->header('Content-Type', 'text/plain');*/
+
         // Prevent the player from playing if the game has already ended
         if ($this->someoneHasWon( $game ) || !$game->spaceIsLeft())
             return response("You are not allowed to play. The game has already ended.")->setStatusCode(403)->header('Content-Type', 'text/plain');
@@ -180,12 +259,14 @@ class GameController extends Controller
         // [ The code to check if the space is free goes here ]
         if( $game->getSpace( $x, $y ) === GameMark::Cross ||  $game->getSpace( $x, $y ) === GameMark::Circle)
             return response("This space has already been claimed!")->setStatusCode(403)->header('Content-Type', 'text/plain');
+
         // If the space is not free, run the code in the line below by removing the //
         //return response("This space has already been claimed!")->setStatusCode(403)->header('Content-Type', 'text/plain');
 
         // [ The code to update the game board goes here ]
         if($game->getSpace($x, $y) === GameMark::None)
             $game->setSpace( $x, $y, GameMark::Circle );
+
         // Saving the game board and output it to the player
         $game->save();
         return $this->status_output( $game );
