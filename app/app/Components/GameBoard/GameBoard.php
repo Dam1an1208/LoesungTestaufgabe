@@ -12,8 +12,7 @@ use Throwable;
 class GameBoard
 {
     // Board size
-    // Change board size to 4 for 4x4 TicTacToe
-    const TTT_SIZE = 3;
+    const TTT_SIZE = 4;
 
     // File name for serialization
     const TTT_GAME = 'tic-tac-toe';
